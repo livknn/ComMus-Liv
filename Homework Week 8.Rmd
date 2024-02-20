@@ -1,0 +1,92 @@
+---
+title: "Homework Week 8"
+author: "*Liv Künne*"
+output:
+  flexdashboard::flex_dashboard:
+    orientation: columns
+---
+
+```{r setup, include=FALSE}
+library(spotifyr)
+library(tidyverse)
+library(flexdashboard)
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Introduction
+=====================================
+    
+Introduction
+-----------------------------------------------------------------------
+### **Introduction**
+
+My corpus consists of two playlists, of which one features 95 Grimes songs and the other one 100 GrimesAI songs. Grimes is a Canadian musician known for her futuristic sounds and approaches to music production. GrimesAI is a project under which AI generated songs using Grime’s voice are being released on Spotify. Anyone can generate songs featuring Grime’s voice with the help of ElfTech, a generative AI system trained on the artist’s voice.
+By comparing the two playlists, I will be able to directly compare songs by the “real” Grimes and songs imitating her. I am intrigued to see if the use of her voice will automatically make other aspects of the songs, like the energy or valence level. similar. I want to explore if music generative AI systems stick to the base points of the songs they were trained on or if they really create something entirely new.
+  
+Visualisation 1
+=====================================
+    
+### **Energy**
+    
+```{r, echo=FALSE}
+GrimesAI <- get_playlist_audio_features("", "1eQ7enBTU7nWANZGnqBULx")
+Grimes <- get_playlist_audio_features("", "6tCReGrpW7rMf4B0vpzA73")
+Compare <-bind_rows(GrimesAI |> mutate(category = "GrimesAI"), Grimes |> mutate(category = "Grimes"))
+ 
+ggplot(Compare, aes(x = energy)) +
+    geom_histogram(binwidth = 0.05, fill = "blue", color = "black", width = 0.5) +
+    facet_wrap(~category)
+```
+
+Visualisation 2
+=====================================
+
+### **Valence**
+    
+```{r, echo=FALSE}
+GrimesAI <- get_playlist_audio_features("", "1eQ7enBTU7nWANZGnqBULx")
+Grimes <- get_playlist_audio_features("", "6tCReGrpW7rMf4B0vpzA73")
+Compare <-bind_rows(GrimesAI |> mutate(category = "GrimesAI"), Grimes |> mutate(category = "Grimes"))
+ 
+ggplot(Compare, aes(x = valence)) +
+    geom_histogram(binwidth = 0.05, fill = "blue", color = "black", width = 0.5) +
+    facet_wrap(~category)
+```
+
+Visualisation 3
+=====================================
+
+### **Danceability**
+    
+```{r, echo=FALSE}
+GrimesAI <- get_playlist_audio_features("", "1eQ7enBTU7nWANZGnqBULx")
+Grimes <- get_playlist_audio_features("", "6tCReGrpW7rMf4B0vpzA73")
+Compare <-bind_rows(GrimesAI |> mutate(category = "GrimesAI"), Grimes |> mutate(category = "Grimes"))
+ 
+ggplot(Compare, aes(x = danceability)) +
+    geom_histogram(binwidth = 0.05, fill = "blue", color = "black", width = 0.5) +
+    facet_wrap(~category)
+```
+
+Visualisation 4
+=====================================
+
+### **Chroma**
+
+I was unable to create a chromagram. :(
+This was the code that didn't work:
+
+genesis_features <- get_track_audio_features("spotify:track:0yljUudXzjVcGEoYmLB17X")
+ggplot(genesis_features, aes(x = chroma, y = value, fill = chroma)) +
+  geom_bar(stat = "identity") +
+  labs(title = "Chromagram: Grimes - Genesis",
+       x = "Chroma",
+       y = "Value")
+
+Discussion
+=====================================
+    
+### **Discussion**
+
+In my visualisations I can already see some differences between songs by Grimes and GrimesAI. There are more GrimesAI songs with a high danceability compared to Grimes. It is interesting to see that AI generated songs tend to be more rhythmic. This could possibly be tied to AI systems following reoccurring patterns when generating music. 
+Furthermore, there are more GrimesAI song with a lower valence compared to Griems songs. I find it really interesting that the AI generated songs are generally more danceable but simultaneously have less valence. I might look at specific songs in the coming weeks to see if there are many AI generated songs that have low valence and high danceability or if these two parameters do not commonly apply to the same tracks. 
